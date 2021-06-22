@@ -1,0 +1,276 @@
+﻿
+@using OtroRegistroConDetalle.Models;
+@using OtroRegistroConDetalle.BLL;
+
+@page "/Ordenes"
+@page "/Ordenes/{OrdenId:int}"
+
+@inject IToastService toast
+
+<EditForm Model="Orden" OnValidSubmit="Guardar">
+    
+    <DataAnnotationsValidator />
+
+    <div class="card">
+
+        <div class="card-header justify-content-center">
+            <h3 class="text-center">Registro de Ordenes</h3>
+        </div>
+
+        <div class="card-body">
+
+            @*OrdenId y Boton Buscar*@
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+
+                        <label class="form-label">ID</label>
+                        <div class="input-group ">
+                            <InputNumber @bind-Value="Orden.ordenId" class="form-control col-5" />
+
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-info" @onclick="Buscar">
+                                    <i class="oi oi-magnifying-glass" />
+                                    Buscar
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            @*Fecha*@
+            <div class="form-group">
+
+                <label>Fecha</label>
+                <InputDate @bind-Value="Orden.fecha" class="form-control col-6" />
+
+            </div>
+
+            <div class="form-group">
+                <label>Suplidor</label>
+                <div>
+                    <InputSelect @bind-Value="Orden.suplidorId" class="custom-select form-control col-6" required>
+                        <option value="0">Seleccione un Suplidor</option>
+
+                        @foreach (var ListaDeSuplidores in SuplidoresBLL.GetSuplidor())
+                        {
+                            <option value="@ListaDeSuplidores.suplidorId">@ListaDeSuplidores.nombre</option>
+
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => Orden.suplidorId)" />
+
+                </div>
+            </div>
+            
+            <div class="card border-info">
+                @*Cuadro De Detalle*@
+                <div class="card-body border-info">
+
+                    <div class="row ">
+
+                        <div class="col-4">
+
+                            @*Cantidad*@
+                            <div class="form-group">
+
+                                <label class="font-weight-bold">Cantidad</label>
+                                <InputNumber @bind-Value="OrdenDetalle.cantidad" class="form-control" />
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-4">
+                            @*Costo*@
+                            <div class="form-group">
+
+                                <label class="font-weight-bold">Costo</label>
+                                <InputNumber @bind-Value="OrdenDetalle.costo" class="form-control" />
+
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+
+                            @*Boton Agregar*@
+                            <div class="form-group">
+                                <label class="font-weight-bold">Boton</label>
+
+                                <button type="button" class="btn btn-primary btn-block" @onclick="AgregarDetalle">
+                                    <i class="oi oi-plus" aria-hidden="true" /> Agregar
+                                </button>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row ">
+
+                        <div class="col">
+
+                            @*Ordenes Detalle*@
+                            <table class="table">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">Id</th>
+                                        <th scope="col">Orden Id</th>
+                                        <th scope="col">Cantidad</th>
+                                        <th scope="col">Costo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Orden.OrdenesDetalle)
+                                    {
+                                        <tr>
+                                            <td>@item.id</td>
+                                            <td>@item.ordenId</td>
+                                            <td>@item.cantidad</td>
+                                            <td>@item.costo</td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-footer border-info">
+                    @*Monto*@
+
+                    <div class="form-group offset-9">
+                        <label class="font-weight-bold">Monto Total: </label>
+                        <InputNumber readonly @bind-Value="Orden.monto" class="form-control" />
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        @*Botones*@
+        <div class="card-footer">
+
+            <div class="form-group text-center" display: inline-block>
+
+                @*Boton Nuevo*@
+                <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo">
+                    <i class="oi oi-file mr-2" />
+                    Nuevo
+
+                </button>
+
+                @*Boton Guardar*@
+                <button type="submit" class="btn btn-lg btn-success">
+                    <i class="oi oi-account-login" style="transform:rotate(90deg)" />
+                    Guardar
+                </button>
+
+                @*Boton Eliminar*@
+                <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar">
+                    <i class="oi oi-trash mr-2" />
+                    Eliminar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public int OrdenId { get; set; }
+
+    private Ordenes Orden { get; set; }
+    private OrdenesDetalle OrdenDetalle { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Nuevo(); //siempre se hace nuevo
+        Buscar();
+    }
+
+    public void Nuevo()
+    {
+        Orden = new Ordenes();
+        OrdenDetalle = new OrdenesDetalle();
+    }
+
+    private void Buscar()
+    {
+        if (Orden.ordenId > 0)
+        {
+            var encontrado = OrdenesBLL.Buscar(Orden.ordenId);
+
+            if (encontrado != null)
+            {
+                this.Orden = encontrado;
+            }
+            else
+                toast.ShowWarning("No encontrado");
+        }
+    }
+
+    private void AgregarDetalle()
+    {
+        Orden.OrdenesDetalle.Add(OrdenDetalle);
+
+        OrdenDetalle = new OrdenesDetalle();
+
+        CalcularMonto();
+
+    }
+
+    public void Guardar()
+    {
+        bool fueGuardado;
+
+        fueGuardado = OrdenesBLL.Guardar(Orden);
+
+        if (fueGuardado)
+        {
+            Nuevo();
+            toast.ShowSuccess("Guardado correctamente");
+        }
+        else
+            toast.ShowError("No fue posible guardar");
+    }
+
+    public void Eliminar()
+    {
+        bool esElimino;
+
+        esElimino = OrdenesBLL.Eliminar(Orden.ordenId);
+
+        if (esElimino)
+        {
+            Nuevo();
+            toast.ShowSuccess("Eliminado correctamente");
+        }
+        else
+            toast.ShowError("No fue posible eliminar");
+    }
+
+    private void CalcularMonto()
+    {
+        Orden.monto = 0;
+
+        foreach (var ListaDeOrdenesDetalle in Orden.OrdenesDetalle)
+        {
+            Orden.monto += ListaDeOrdenesDetalle.costo * ListaDeOrdenesDetalle.cantidad;
+
+        }
+
+
+    }
+
+}

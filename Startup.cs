@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using OtroRegistroConDetalle.Data;
+using Blazored.Toast;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +28,8 @@ namespace OtroRegistroConDetalle
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+            services.AddBlazoredToast();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
