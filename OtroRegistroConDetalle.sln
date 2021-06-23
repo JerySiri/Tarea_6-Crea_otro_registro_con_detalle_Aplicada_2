@@ -5,6 +5,11 @@ VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OtroRegistroConDetalle", "OtroRegistroConDetalle.csproj", "{9F2DB900-4E35-4252-8F29-E80A17081B07}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestDeTarea6", "..\TestDeTarea6\TestDeTarea6.csproj", "{8775B7EF-AC4E-4AB7-8B73-B228E7B51BF1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9F2DB900-4E35-4252-8F29-E80A17081B07} = {9F2DB900-4E35-4252-8F29-E80A17081B07}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +20,10 @@ Global
 		{9F2DB900-4E35-4252-8F29-E80A17081B07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F2DB900-4E35-4252-8F29-E80A17081B07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F2DB900-4E35-4252-8F29-E80A17081B07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8775B7EF-AC4E-4AB7-8B73-B228E7B51BF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8775B7EF-AC4E-4AB7-8B73-B228E7B51BF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8775B7EF-AC4E-4AB7-8B73-B228E7B51BF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8775B7EF-AC4E-4AB7-8B73-B228E7B51BF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -70,9 +70,9 @@ namespace OtroRegistroConDetalle.BLL
             {
                 contexto.Database.ExecuteSqlRaw($"Delete FROM OrdenesDetalle Where ordenId={orden.ordenId}");
 
-                foreach (var ListadeMoras in orden.OrdenesDetalle)
+                foreach (OrdenesDetalle OrdenDetalle in orden.OrdenesDetalle)
                 {
-                    contexto.Entry(ListadeMoras).State = EntityState.Added;
+                    contexto.Entry(OrdenDetalle).State = EntityState.Added;
                 }
 
                 contexto.Entry(orden).State = EntityState.Modified;
@@ -120,7 +120,7 @@ namespace OtroRegistroConDetalle.BLL
             try
             {
                 //buscar la entidad que se desea eliminar
-                var orden = contexto.Ordenes.Find(id);
+                Ordenes orden = contexto.Ordenes.Find(id);
 
                 if (orden != null)
                 {

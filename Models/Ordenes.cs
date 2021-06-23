@@ -17,6 +17,7 @@ namespace OtroRegistroConDetalle.Models
         [Required(ErrorMessage = "Debe seleccionar un Suplidor.")]
         [Range(1, int.MaxValue, ErrorMessage = "Seleccionar un Suplidor valido.")]
         public int suplidorId { get; set; } = 0;
+        public virtual Suplidores suplidor { get; set; }
 
         public float monto { get; set; } = 0f;
 
